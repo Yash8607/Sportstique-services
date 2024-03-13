@@ -23,14 +23,22 @@ public class AuthenticationController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SigninRequest signinRequest) {
-        return ResponseEntity.ok(authenticationService.signin(signinRequest));
+    public ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
+
+        try{
+            JwtAuthenticationResponse response=authenticationService.signin(signinRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }catch(Exception ex){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong Credentials");
+        }
+
     }
 
 
 
     @PostMapping("/user/signup")
     public ResponseEntity<String> signUp(@RequestBody UserSignUpRequest signUpRequest) {
+        authenticationService.userSignUp(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Registration Successfully Completed");
     }
 

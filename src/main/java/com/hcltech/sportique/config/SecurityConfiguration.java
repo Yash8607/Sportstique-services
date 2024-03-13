@@ -1,7 +1,6 @@
 package com.hcltech.sportique.config;
 
 import com.hcltech.sportique.entity.Role;
-import com.hcltech.sportique.service.OrganizationService;
 import com.hcltech.sportique.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +34,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll()
                         .requestMatchers("/api/v1/organization").hasAuthority(Role.ORGANIZATION.name())
-                        .requestMatchers("/api/v1/user").hasAuthority(Role.USER.name())
+                        .requestMatchers("/api/v1/user/**").hasAuthority(Role.USER.name())
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

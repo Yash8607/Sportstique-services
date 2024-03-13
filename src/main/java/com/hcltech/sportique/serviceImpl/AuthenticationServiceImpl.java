@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         jwtAuthenticationResponse.setId(user.getUserId());
         jwtAuthenticationResponse.setRole(user.getRole());
+        jwtAuthenticationResponse.setName(user.getName());
 
 
         return jwtAuthenticationResponse;
@@ -57,16 +59,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public String userSignUp(UserSignUpRequest userSignUpRequest) {
         User user = new User();
-
+        Optional<User> u = userRepository.findByEmail(userSignUpRequest.getEmail());
         user.setEmail(userSignUpRequest.getEmail());
         user.setName(userSignUpRequest.getName());
         user.setMobileNumber(userSignUpRequest.getMobileNumber());
         user.setPassword(passwordEncoder.encode(userSignUpRequest.getPassword()));
         user.setGender(userSignUpRequest.getGender());
-
         user.setRole(Role.USER);
-         userRepository.save(user);
-         return null;
+        userRepository.save(user);
+        return null;
 
 
     }
