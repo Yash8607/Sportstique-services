@@ -1,5 +1,6 @@
 package com.hcltech.sportique.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,7 +15,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Organization_Details")
@@ -31,7 +34,7 @@ public class Organization implements UserDetails {
     private String organization_name;
     private String organization_location;
     @Email(message = "Email address is not valid !!")
-    @Column
+    @Column(unique = true)
     private String organizationEmail;
     private String organization_link;
 
@@ -43,17 +46,20 @@ public class Organization implements UserDetails {
     @Size(min=10, message="Please enter valid phone number")
     @Pattern(regexp = "^[0-9]{10}$")
     private String organization_phoneNumber;
-    private String organization_adminName;
+
     @Column(unique = true)
     private String organization_uniqueId;
 
-    @NotEmpty
-    @Size(min=10, message="Please enter valid phone number")
-    @Pattern(regexp = "^[0-9]{10}$")
-    private String organization_adminNumber;
+    private String logo;
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Event> events = new HashSet<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

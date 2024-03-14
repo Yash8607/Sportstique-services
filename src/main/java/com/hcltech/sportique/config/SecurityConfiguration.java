@@ -2,7 +2,6 @@ package com.hcltech.sportique.config;
 
 import com.hcltech.sportique.entity.Role;
 import com.hcltech.sportique.service.OrganizationService;
-import com.hcltech.sportique.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

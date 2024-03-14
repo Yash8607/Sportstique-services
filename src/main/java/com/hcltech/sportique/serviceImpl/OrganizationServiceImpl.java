@@ -31,6 +31,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     public List<Organization> getAllOrganization(){
-        return organizationRepository.findAll(); 
+        return organizationRepository.findAll();
     }
 }

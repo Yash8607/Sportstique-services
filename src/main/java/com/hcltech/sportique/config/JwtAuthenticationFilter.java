@@ -1,9 +1,7 @@
 package com.hcltech.sportique.config;
 
-import com.hcltech.sportique.entity.Role;
 import com.hcltech.sportique.service.JwtService;
 import com.hcltech.sportique.service.OrganizationService;
-import com.hcltech.sportique.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

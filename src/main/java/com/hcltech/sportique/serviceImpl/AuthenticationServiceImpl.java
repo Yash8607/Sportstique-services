@@ -3,9 +3,7 @@ package com.hcltech.sportique.serviceImpl;
 import com.hcltech.sportique.dto.*;
 import com.hcltech.sportique.entity.Organization;
 import com.hcltech.sportique.entity.Role;
-import com.hcltech.sportique.entity.User;
 import com.hcltech.sportique.repository.OrganizationRepository;
-import com.hcltech.sportique.repository.UserRepository;
 import com.hcltech.sportique.service.AuthenticationService;
 import com.hcltech.sportique.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
 
-    private final UserRepository userRepository;
+
 
     public Organization signUp(OrganizationSignUpRequest signUpRequest){
         Organization organization=new Organization();
@@ -40,9 +38,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         organization.setOrganization_location(signUpRequest.getOrganization_location());
         organization.setOrganization_link(signUpRequest.getOrganization_link());
         organization.setOrganization_phoneNumber(signUpRequest.getOrganization_phoneNumber());
+        organization.setLogo(signUpRequest.getLogo());
 
-        organization.setOrganization_adminName(signUpRequest.getOrganization_adminName());
-        organization.setOrganization_adminNumber(signUpRequest.getOrganization_adminNumber());
 
         organization.setRole(Role.ORGANIZATION);
 
@@ -82,6 +79,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             jwtAuthenticationResponse.setId(organization.getId());
             jwtAuthenticationResponse.setRole(organization.getRole());
+            jwtAuthenticationResponse.setName(organization.getOrganization_name());
+            jwtAuthenticationResponse.setLogo(organization.getLogo());
 
 
 
@@ -107,38 +106,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return null;
     }
 
-    public User userSignUp(UserSignUpRequest userSignUpRequest){
-        User user=new User();
-
-        user.setEmail(userSignUpRequest.getEmail());
-        user.setFirstName(userSignUpRequest.getFirstName());
-        user.setLastName(userSignUpRequest.getLastName());
-        user.setMobileNumber(userSignUpRequest.getMobileNumber());
-        user.setPassword(passwordEncoder.encode(userSignUpRequest.getPassword()));
-        user.setDateOfBirth(userSignUpRequest.getDateOfBirth());
-
-        user.setRole(Role.USER);
-        return userRepository.save(user);
 
 
-    }
 
-    public JwtAuthenticationResponse userRefreshToken(RefreshTokenRequest refreshTokenRequest){
-        String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
-        User user=userRepository.findByEmail(userEmail).orElseThrow();
-        if(jwtService.isTokenValid(refreshTokenRequest.getToken(), user)){
-            var jwt=jwtService.generateToken(user);
-
-            JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-
-            jwtAuthenticationResponse.setToken(jwt);
-            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
-            jwtAuthenticationResponse.setId(user.getUserId());
-            jwtAuthenticationResponse.setRole(user.getRole());
-            return jwtAuthenticationResponse;
-        }
-        return null;
-    }
 
 //    public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
 //        // Authenticate user

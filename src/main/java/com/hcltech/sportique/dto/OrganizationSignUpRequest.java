@@ -22,11 +22,10 @@ public class OrganizationSignUpRequest {
     private String organization_description;
 
     private String organization_phoneNumber;
-    private String organization_adminName;
 
+    private String logo;
     private String organization_uniqueId;
 
-    private String organization_adminNumber;
 
 
 }
